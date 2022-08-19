@@ -118,6 +118,110 @@ $(".booking_range").on("apply.daterangepicker", function (e, picker) {
     //            alert("Your range selection includes disabled dates!");
   }
 });
-//    console.log(tempObj)
-//		tempObj = {};
-//    console.log(tempObj)
+
+
+// TEXT EDITING WXSGY WITH TINY
+
+let htm = `<div class="mv-2">
+		<ul class="list-group">
+			<li class="list-group-item p-4">
+				<h4>Privacy policies</h4>			
+        
+        <form class="mt-20" class="privacyPolicy" method="post">
+          <textarea id="pp" name="pp">
+           
+          </textarea>
+        </form>
+        
+        <button class="btn btn-primary mt-20" id="privacyPolicy" style="background-color: #f35588;">Create from template</button>
+			</li>
+		</ul>
+	</div>`
+
+  <script src="https://cdn.tiny.cloud/1/389dk9hmiohyrnvo1t6i02swtfly47ildidbpxesuwselmrf/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script> 
+  // <script src='https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.0/tinymce.min.js' referrerpolicy="origin"></script>
+
+  <script>
+    tinymce.init({
+      selector: 'textarea',
+//      plugins: 'a11ychecker advcode casechange export formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
+//      toolbar: 'a11ycheck addcomment showcomments casechange checklist code export formatpainter pageembed permanentpen table',
+      toolbar_mode: 'floating',
+      tinycomments_mode: 'embedded',
+      tinycomments_author: 'Author name',
+      branding: false
+    });    
+    
+  </script>
+
+$.get('/admin/settings/fetchPolicy/', (res)=>{
+        
+  if(res){
+    
+    $('#sp').html(res.store_policy);
+    $('#pp').html(res.privacy_policy);
+    $('#tos').html(res.terms_of_service);
+    $('#shp').html(res.shipping_policy);
+    
+//      tinyMCE.init({
+//        // General options
+//        mode : "specific_textareas",
+//        theme : "advanced",
+//        width: "100%",
+//        plugins : "pagebreak,paste,fullscreen,visualchars",
+//
+//        // Theme options
+//        theme_advanced_buttons1 : "code,|,bold,italic,underline,|,sub,sup,|,charmap,|,fullscreen,|,bullist,numlist,|,pasteword",
+//        theme_advanced_buttons2 :"",
+//        theme_advanced_buttons3 :"",
+//        theme_advanced_buttons4 :"",
+//        theme_advanced_toolbar_location : "top",
+//        theme_advanced_toolbar_align : "left",
+//        theme_advanced_statusbar_location : "bottom",
+//        valid_elements : "i,sub,sup",
+//        invalid_elements : "p, script",
+//        editor_deselector : "mceOthers"
+//        });
+  }    
+  
+  
+}, 'json')
+  
+let data = {}
+
+$('#savePolicy').on('click', (e)=>{
+  e.preventDefault()
+  
+  const storePolicy = tinymce.get("sp").getContent()
+  const privacyPolicy = tinymce.get("pp").getContent()
+  const termOfService = tinymce.get("tos").getContent()
+  const shippingPolicy = tinymce.get("shp").getContent()
+  
+//    console.log(storePolicy)
+  
+  data = {
+    storePolicy,
+    privacyPolicy,
+    termOfService,
+    shippingPolicy
+  }
+   
+  $.post('/admin/settings/save/policy/', data, (res)=>{
+//      console.log(res)
+    if(res.status == 'success'){
+      pwp.showToast('User policies have been saved',"success", false)
+    }else{
+      pwp.showToast('Unable to save user policies, please try again...',"danger", true)
+    }
+  }, 'json')
+})
+
+// UPDATE THE TEXT FIELD WITH THE DETAILS NEEDED TO POPULATE THE PRIVACY POLICY AND TERMS OF SERVICES
+
+$('#privacyPolicy').on('click', ()=>{
+  tinymce.get('pp').setContent(defaultPolicy.privacy);
+})  
+
+$('#termOfService').on('click', ()=>{
+  tinymce.get('tos').setContent(defaultPolicy.termOfService);
+})  
