@@ -1,4 +1,4 @@
-// USING DATE RANGE PICKER TO DISABLE DATES
+// USING DATE RANGE PICKER TO DISABLE DATES ----------------------------------------------------------------------
 
 var start = moment();
 var end = moment();
@@ -120,7 +120,7 @@ $(".booking_range").on("apply.daterangepicker", function (e, picker) {
 });
 
 
-// TEXT EDITING WXSGY WITH TINY
+// TEXT EDITING WXSGY WITH TINY ----------------------------------------------------------------------
 
 let htm = `<div class="mv-2">
 		<ul class="list-group">
@@ -225,3 +225,14 @@ $('#privacyPolicy').on('click', ()=>{
 $('#termOfService').on('click', ()=>{
   tinymce.get('tos').setContent(defaultPolicy.termOfService);
 })  
+
+
+// TRIGGER AN ONCLICK EVENT WITH JQUERY WITHOUT CLICKING ----------------------------------------------------------------------
+
+
+setInterval( "clickRight()", 5000 );
+
+function clickRight()
+{
+   $('.slide_right').trigger('click'); 
+};
